@@ -55,24 +55,24 @@ Make sure that the name of the project folder is same in the "INSTALLED APP" sec
       
       'django.contrib.staticfiles',
   
-  ]
+    ]
 
 Create a virtual environment and activate the environment
 
-  python3 -m venv env
-  
-  env\scripts\activate
+    python3 -m venv env
+
+    env\scripts\activate
   
 Go to the folder in cmd then follow the following steps
 
 Install the required packages
 
-  python -m pip install django==2.2.11
-  
-  python -m pip install psycopg2
+    python -m pip install django==2.2.11
+
+    python -m pip install psycopg2
   
 Run the app
 
-  python manage.py runserver
+    python manage.py runserver
 
 
