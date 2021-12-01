@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>Document</title>
+    <style>
+        p,span{
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-dark pt-5">
+    <div class="container">
+        <h1 class="text-center mb-5 text-white">Syncware Programming</h1>
+        <div class="row ml-0 mr-0">
+            <div class="col-sm-3">
+                <p>Input Signal</p><br>
+                <div class="form-group">
+                    <select class="form-control" id="sel1">
+                        <option>Select device</option>
+                        {% for sts in st %}
+                            <optgroup label="{{sts.device_name}}">
+                                {% for sig in sts.signal %}
+                                <option value="{{sig}} {{sts.signal}}">{{sts.device_name}} {{sig}}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <p>Conditional Statements</p>
+                <div class="form-group">
+                    <select class="form-control" id="sel3">
+                        <!-- <option value="0">Select Condition</option> -->
+                        <option value="IF">IF/THEN</option>
+                        <option value="wait">WAIT</option>
+                        <option value="less">LESS THAN</option>
+                        <option value="more">MORE THAN</option>
+                    </select>
+                  </div>
+            </div>
+            <div class="col-sm-2">
+                <p>Value</p><br>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="usr">
+                </div>
+                <span id="inputval"></span>
+            </div>
+            <div class="col-sm-3">
+                <p>Output Signal</p><br>
+                <div class="form-group">
+                    <select class="form-control" id="sel2">
+                      <option>Select device</option>
+                        {% for sts in st %}
+                            <optgroup label="{{sts.device_name}}">
+                                {% for sig in sts.signal %}
+                                <option value="{{sig}} {{sts.signal}}">{{sts.device_name}} {{sig}}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <p>Value</p><br>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="usr1">
+                </div>
+                <span id="outputval"></span>
+            </div>
+        </div>
+    </div>
+    <!-- <div>
+        {% for sts in st %}
+
+<p>{{sts.device_name}}, {{sts.signal.position}}</p>
+
+{% endfor %}
+    </div> -->
+    <script>
+        $(document).ready(function(){
+            var selectedInDevice
+            var selectedInSignal
+            var selectedCondition
+            var selectedOutDevice
+            var selectedOutSignal
+            var selectedInSignalValue
+            var selectedOutSignalValue
+            var value
+            var count=0
+            var count1=0
+            $("#sel1").change(function(){
+                selectedInDevice = $(this).find(':selected').closest('optgroup').attr('label');
+                var valu = $(this).find(':selected').closest('option').attr('value');
+                var position = valu.indexOf('{')
+                var _value = valu.substr(position);
+                selectedInSignal = valu.slice(0,position-1)
+                var s = _value.replace(/'/g,"\"")
+                var sam = JSON.parse(s)
+                selectedInSignalValue = sam[selectedInSignal]
+                console.log(selectedInSignalValue)
+                $( "#inputval" ).empty();
+                $( "#inputval" ).append( "Give the value as "+typeof selectedInSignalValue+" type");
+                if(typeof selectedInSignalValue == 'object'){
+                    $("#inputval").append(" of "+selectedInSignalValue.length+" length")
+                }
+                
+            });
+            $("#sel3").change(function(){
+                selectedCondition = $(this).children("option:selected").val();
+            });
+            $("#sel2").change(function(){
+                selectedOutput = $(this).find(':selected').closest('optgroup').attr('label');
+                var valu = $(this).find(':selected').closest('option').attr('value');
+                var position = valu.indexOf('{')
+                var _value = valu.substr(position);
+                selectedOutSignal = valu.slice(0,position-1)
+                var s = _value.replace(/'/g,"\"")
+                var sam = JSON.parse(s)
+                selectedOutSignalValue = sam[selectedOutSignal]
+                console.log(selectedOutSignalValue)
+                $( "#outputval" ).empty();
+                $( "#outputval" ).append( "Give the value as "+typeof selectedOutSignalValue+" type");
+                if(typeof selectedOutSignalValue == 'object'){
+                    $("#outputval").append(" of "+selectedOutSignalValue.length+" length")
+                }
+                
+            });
+            // InputValue = $('#usr').val();
+            $("#usr").focus(function(){
+                count=count+1
+            })
+            $("#usr1").focus(function(){
+                count1=count1+1
+            })
+            $("#usr").focusout(function() {
+                if(typeof selectedInSignalValue == 'number'){
+                    var val = Number($(this).val()) 
+                    if(isNaN(val) && count>0) { 
+                        $( "#inputval" ).empty();
+                        console.log(typeof $(this).val(),count)
+                        $( "#inputval" ).append( "Give the value as "+typeof selectedInSignalValue+" type");
+                        $(this).css('border', 'solid 2px red'); 
+                    }
+                    else {
+                        
+                        // If it is not blank.
+                        $(this).css('border', ''); 
+                        $( "#inputval" ).empty();   
+                    }    
+                }
+                else{
+                    var val = $(this).val().split(",") 
+                    console.log(val)
+                    for(var x in val){
+                        var arr = Number(val[x]) 
+                        // console.log(arr)
+                        if(isNaN(arr) && count>0) { 
+                            $( "#inputval" ).empty();
+                            // console.log(count)
+                            $( "#inputval" ).append( "All the values should be numbers");
+                            $(this).css('border', 'solid 2px red'); 
+                            break
+                        }
+                        else {
+                            
+                            // If it is not blank.
+                            $(this).css('border', '');  
+                            $( "#inputval" ).empty();  
+                        }    
+                    }
+                }
+            }) .trigger("focusout");
+            // outputValue = $('#usr1').val();
+            $("#usr1").focusout(function() {
+                if(typeof selectedOutSignalValue == 'number'){
+                    var val = Number($(this).val()) 
+                    if(isNaN(val) && count>0) { 
+                        $( "#outputval" ).empty();
+                        // console.log(typeof $(this).val(),count1)
+                        $( "#outputval" ).append( "Give the value as "+typeof selectedOutSignalValue+" type");
+                        $(this).css('border', 'solid 2px red'); 
+                    }
+                    else {
+                        
+                        // If it is not blank.
+                        $(this).css('border', '');  
+                        $( "#outputval" ).empty();  
+                    }    
+                }
+                else{
+                    var val = $(this).val().split(",") 
+                    console.log(val)
+                    for(var x in val){
+                        var arr = Number(val[x]) 
+                        // console.log(arr)
+                        if(isNaN(arr) && count>0) { 
+                            $( "#outputval" ).empty();
+                            // console.log(count)
+                            $( "#outputval" ).append( "All the values should be numbers");
+                            $(this).css('border', 'solid 2px red'); 
+                            break
+                        }
+                        else {
+                            
+                            // If it is not blank.
+                            $(this).css('border', ''); 
+                            $( "#outputval" ).empty();   
+                        }    
+                    }
+                }
+            }) .trigger("focusout");
+        });
+    </script>
+</body>
+</html>
