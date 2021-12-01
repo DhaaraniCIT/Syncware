@@ -16,26 +16,43 @@ data:
 
 Change the setting.py according to you db settings
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'syncware', --> DB name
-        'USER': 'postgres', --> default user name
-        'PASSWORD': '*****', --> password
-        'HOST': '127.0.0.1', --> HOST
-        'PORT': '5432',      --> default port
-    }
-}
+  DATABASES = {
+  
+      'default': {
+      
+          'ENGINE': 'django.db.backends.postgresql',
+          
+          'NAME': 'syncware', --> DB name
+          
+          'USER': 'postgres', --> default user name
+          
+          'PASSWORD': '*****', --> password
+          
+          'HOST': '127.0.0.1', --> HOST
+          
+          'PORT': '5432',      --> default port
+          
+      }
+      
+  }
 
 
 Make sure that the name of the project folder is same in the "INSTALLED APP" section in settings page
 
-  INSTALLED_APPS = [
-    'syncware', --> name of the app
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-]
+    INSTALLED_APPS = [
+    
+      'syncware', --> name of the app
+      
+      'django.contrib.admin',
+      
+      'django.contrib.auth',
+      
+      'django.contrib.contenttypes',
+      
+      'django.contrib.sessions',
+      
+      'django.contrib.messages',
+      
+      'django.contrib.staticfiles',
+  
+  ]
